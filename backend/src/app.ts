@@ -1,5 +1,8 @@
 import cors from 'cors';
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
+import sendResponse from './utils/sendResponse';
 
 const app: Application = express();
 
@@ -9,12 +12,29 @@ app.use(express.json());
 
 // Routes
 
-app.get('/', (req, res) => {
-  res.send('Task Manager server is up and running!');
+app.get('/', (req: Request, res: Response) => {
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: '🌐 Taskmaster Server is live 🚀',
+    data: null,
+  });
+});
+
+// Test route
+app.get('/test', (req: Request, res: Response) => {
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Test route is working 🚀 ',
+    data: null,
+  });
 });
 
 // Global error handler
+app.use(globalErrorHandler);
 
 // Not Found handler
+app.use(notFound);
 
 export default app;
