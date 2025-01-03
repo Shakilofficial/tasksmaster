@@ -1,6 +1,6 @@
 import MainLayout from "@/layout/MainLayout";
 import Home from "@/pages/Home";
-import Users from "@/pages/Users";
+import Tasks from "@/pages/Tasks";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -13,8 +13,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "users",
-        element: <Users />,
+        path: "tasks",
+        element: <Tasks />,
       },
     ],
   },
