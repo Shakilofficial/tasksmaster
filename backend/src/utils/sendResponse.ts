@@ -8,9 +8,7 @@ const sendResponse = <T>(
   if (!data || (Array.isArray(data) && data.length === 0)) {
     return res.status(404).json({
       success: false,
-      message: message || 'No Data Found',
-      meta: meta || {},
-      data: [],
+      message: message || 'No Data Found 🔍',
     });
   }
 
