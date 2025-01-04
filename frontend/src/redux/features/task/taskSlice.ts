@@ -1,3 +1,4 @@
+import { RootState } from "@/redux/store";
 import { ITask } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -48,7 +49,7 @@ const initialState: InitialState = {
       title: "Write unit tests for core functionality",
       description:
         "Write unit tests for the core functionalities of the application to ensure that they are working as expected. Unit tests will help to catch bugs early in the development process.",
-      priority: "high",
+      priority: "low",
       dueDate: "2023-02-03T00:00:00.000Z",
       isCompleted: false,
     },
@@ -60,5 +61,9 @@ const taskSlice = createSlice({
   initialState,
   reducers: {},
 });
+
+export const selectTasks = (state: RootState) => {
+  return state.todo.tasks;
+};
 
 export default taskSlice.reducer;
