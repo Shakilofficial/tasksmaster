@@ -6,3 +6,13 @@ export interface ITask {
   dueDate: string;
   isCompleted: boolean;
 }
+
+export interface IUser {
+  id: string;
+  name: string;
+}
+
+export const navItems = [
+  { path: "/tasks", label: "Tasks" },
+  { path: "/users", label: "Users" },
+];

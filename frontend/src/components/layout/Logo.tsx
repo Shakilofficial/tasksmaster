@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
+
 const Logo = () => {
   return (
-    <div className="flex items-center space-x-2">
-      <img src="/src/assets/logo.png" alt="Logo" className="h-8" />
-      <span className="text-2xl font-semibold">TaskMaster</span>
-    </div>
+    <Link to="/" className="flex items-center space-x-2">
+      <img src="/src/assets/logo.png" alt="Logo" className="h-6" />
+      <span className="text-lg font-semibold">TaskMaster</span>
+    </Link>
   );
 };
 

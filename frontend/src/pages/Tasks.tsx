@@ -14,9 +14,7 @@ const Tasks = () => {
       <div className="flex flex-col gap-4">
         {/* Heading and AddTaskModal */}
         <div className="flex flex-row items-start sm:items-center justify-between gap-4">
-          <h1 className="text-2xl ">
-            Task Manager
-          </h1>
+          <h1 className="text-lg ">Tasks Manager</h1>
           <AddTaskModal />
         </div>
 

@@ -32,7 +32,7 @@ const TaskCard = ({ task }: IProps) => {
 
           {/* Task Title */}
           <h1
-            className={cn("text-base font-semibold text-gray-800", {
+            className={cn("font-semibold", {
               "line-through text-gray-400": task.isCompleted,
             })}
           >
