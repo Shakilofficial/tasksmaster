@@ -31,27 +31,33 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { addTask } from "@/redux/features/task/taskSlice";
-import { selectUsers } from "@/redux/features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { ITask } from "@/types";
+import { useCreateTaskMutation } from "@/redux/api/baseApi";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
+
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export function AddTaskModal() {
-  const users = useAppSelector(selectUsers);
-
   const [open, setOpen] = useState(false);
   const form = useForm();
+  const [createTask, { isLoading, isError, error }] = useCreateTaskMutation();
 
-  const dispatch = useAppDispatch();
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const body = {
+      ...data,
+      isCompleted: false,
+    };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    dispatch(addTask(data as ITask));
-    setOpen(false);
-    form.reset();
+    try {
+      await createTask(body).unwrap();
+      toast.success("Task created successfully!");
+      setOpen(false);
+      form.reset();
+    } catch (err) {
+      toast.error("Failed to create task. Please try again.");
+    }
   };
 
   return (
@@ -65,7 +71,7 @@ export function AddTaskModal() {
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
           <DialogDescription className="sr-only">
-            Make changes to your profile here. Click save when you're done.
+            Create a new task by filling in the details below.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -75,12 +81,12 @@ export function AddTaskModal() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel> Title </FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       value={field.value || ""}
-                      placeholder="Title"
+                      placeholder="Enter task title"
                     />
                   </FormControl>
                 </FormItem>
@@ -96,7 +102,7 @@ export function AddTaskModal() {
                     <Textarea
                       {...field}
                       value={field.value || ""}
-                      placeholder="Description"
+                      placeholder="Enter task description"
                     />
                   </FormControl>
                 </FormItem>
@@ -166,39 +172,23 @@ export function AddTaskModal() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="assignedTo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Assigned To</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a user" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {users.map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+
             <DialogFooter className="mt-4">
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="animate-spin h-4 w-4" />
+                ) : (
+                  "Save"
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
+        {isError && error && (
+          <p className="text-sm text-destructive mt-4">
+            {error.data?.message || "An unexpected error occurred."}
+          </p>
+        )}
       </DialogContent>
     </Dialog>
   );
