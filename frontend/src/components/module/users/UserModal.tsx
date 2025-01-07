@@ -31,6 +31,7 @@ export function UserModal() {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     dispatch(addUser(data as IUser));
     setOpen(false);
+    form.reset();
   };
 
   return (

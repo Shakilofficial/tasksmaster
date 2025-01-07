@@ -3,6 +3,7 @@ export interface ITask {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
+  assignedTo: string | null;
   dueDate: string;
   isCompleted: boolean;
 }
