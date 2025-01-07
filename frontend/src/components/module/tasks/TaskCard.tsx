@@ -1,12 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import {
-  deleteTask,
-  toggleCompleteState,
-} from "@/redux/features/task/taskSlice";
-import { selectUsers } from "@/redux/features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { ITask } from "@/types";
 import { Trash2 } from "lucide-react";
 
@@ -15,11 +9,6 @@ interface IProps {
 }
 
 const TaskCard = ({ task }: IProps) => {
-  const dispatch = useAppDispatch();
-  const users = useAppSelector(selectUsers);
-
-  const assignedUser = users.find((user) => user.id === task.assignedTo);
-
   return (
     <div className="border px-5 py-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col gap-4">
       {/* Header Section */}
@@ -47,14 +36,9 @@ const TaskCard = ({ task }: IProps) => {
         {/* Actions */}
         <div className="flex gap-3 items-center">
           {/* Checkbox to Toggle Completion */}
-          <Checkbox
-            checked={task.isCompleted}
-            onClick={() => dispatch(toggleCompleteState(task.id))}
-            className="cursor-pointer"
-          />
+          <Checkbox checked={task.isCompleted} className="cursor-pointer" />
           {/* Delete Button */}
           <Button
-            onClick={() => dispatch(deleteTask(task.id))}
             variant="ghost"
             className="p-2 text-red-500 hover:text-red-700 transition-colors"
           >
@@ -65,9 +49,6 @@ const TaskCard = ({ task }: IProps) => {
 
       {/* Description */}
       <p className="text-sm text-gray-600">{task.description}</p>
-      <p className="text-gray-400 text-right">
-        Assigned to - {assignedUser ? assignedUser.name : "No one"}
-      </p>
     </div>
   );
 };
