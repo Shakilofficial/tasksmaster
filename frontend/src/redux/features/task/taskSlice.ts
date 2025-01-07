@@ -1,6 +1,7 @@
 import { RootState } from "@/redux/store";
 import { ITask } from "@/types";
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { deleteUser } from "../user/userSlice";
 
 interface InitialState {
   tasks: ITask[];
@@ -15,6 +16,7 @@ const initialState: InitialState = {
       description:
         "The login functionality is not working for users with special characters in their usernames. Fix the bug so that users can login successfully regardless of their username characters.",
       priority: "high",
+      assignedTo: "null",
       dueDate: "2023-01-06T00:00:00.000Z",
       isCompleted: false,
     },
@@ -24,6 +26,7 @@ const initialState: InitialState = {
       description:
         "Add a new search functionality to the application that allows users to search for specific data points. The search should be able to filter by different criteria and return relevant results.",
       priority: "medium",
+      assignedTo: "null",
       dueDate: "2023-01-13T00:00:00.000Z",
       isCompleted: false,
     },
@@ -33,6 +36,7 @@ const initialState: InitialState = {
       description:
         "The API documentation is outdated and needs to be updated to reflect the latest changes made to the API. Update the documentation to include new endpoints, parameters, and response formats.",
       priority: "low",
+      assignedTo: "null",
       dueDate: "2023-01-20T00:00:00.000Z",
       isCompleted: false,
     },
@@ -42,6 +46,7 @@ const initialState: InitialState = {
       description:
         "Create a new user interface design for the mobile app that is more user-friendly and intuitive. The design should be responsive and work well on different screen sizes.",
       priority: "medium",
+      assignedTo: "null",
       dueDate: "2023-01-27T00:00:00.000Z",
       isCompleted: false,
     },
@@ -51,6 +56,7 @@ const initialState: InitialState = {
       description:
         "Write unit tests for the core functionalities of the application to ensure that they are working as expected. Unit tests will help to catch bugs early in the development process.",
       priority: "low",
+      assignedTo: "null",
       dueDate: "2023-02-03T00:00:00.000Z",
       isCompleted: false,
     },
@@ -58,10 +64,18 @@ const initialState: InitialState = {
   filter: "all",
 };
 
-type DraftTask = Pick<ITask, "title" | "description" | "priority" | "dueDate">;
+type DraftTask = Pick<
+  ITask,
+  "title" | "description" | "priority" | "assignedTo" | "dueDate"
+>;
 
 const createTask = (taskData: DraftTask): ITask => {
-  return { id: nanoid(), isCompleted: false, ...taskData };
+  return {
+    ...taskData,
+    id: nanoid(),
+    isCompleted: false,
+    assignedTo: taskData.assignedTo ? taskData.assignedTo : null,
+  };
 };
 
 const taskSlice = createSlice({
@@ -98,6 +112,13 @@ const taskSlice = createSlice({
     ) => {
       state.filter = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(deleteUser, (state, action) => {
+      state.tasks.forEach((task) =>
+        task.assignedTo === action.payload ? (task.assignedTo = null) : task
+      );
+    });
   },
 });
 

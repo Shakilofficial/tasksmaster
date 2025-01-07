@@ -1,10 +1,11 @@
 import UserCard from "@/components/module/users/UserCard";
-import { UserModal } from "@/components/module/users/userModal";
+import { UserModal } from "@/components/module/users/UserModal";
 import { selectUsers } from "@/redux/features/user/userSlice";
 import { useAppSelector } from "@/redux/hook";
 
 const Users = () => {
-  const users = useAppSelector(selectUsers); // Get the list of users from Redux store
+  const users = useAppSelector(selectUsers);
+  console.log(users);
 
   return (
     <div className="flex flex-col gap-6 my-8 mx-4 md:mx-8 lg:mx-16">
